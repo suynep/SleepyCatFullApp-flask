@@ -1,0 +1,74 @@
+{% extends "index.html" %} {% block externalscripts %}
+<!-- <script
+  src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.2/p5.min.js"
+  integrity="sha512-1YMgn4j8cIL91s14ByDGmHtBU6+F8bWOMcF47S0cRO3QNm8SKPNexy4s3OCim9fABUtO++nJMtcpWbINWjMSzQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script> -->
+<!-- <script src="{{ url_for('static', filename='js/p5.js') }}"></script> -->
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css" />
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+{% endblock %} {% block content %}
+<textarea id="my-text-area"></textarea>
+<div class="bubbles">
+  <!-- Generate multiple bubble divs using JavaScript -->
+</div>
+
+<script>
+  const bubbleContainer = document.querySelector(".bubbles");
+  const MAX_BUBBLES = 30; // Limit the number of bubbles
+
+  function createBubble() {
+    const bubble = document.createElement("div");
+    bubble.classList.add("bubble");
+
+    // Randomize size and position
+    const size = Math.random() * 20 + 10;
+    bubble.style.width = `${size}px`;
+    bubble.style.height = `${size}px`;
+    bubble.style.left = `${Math.random() * 100}vw`;
+
+    // Randomize animation delay and duration
+    const delay = Math.random() * -8;
+    bubble.style.animationDelay = `${delay}s`;
+
+    return bubble;
+  }
+
+  function initBubbles() {
+    for (let i = 0; i < MAX_BUBBLES; i++) {
+      const bubble = createBubble();
+      bubbleContainer.appendChild(bubble);
+    }
+  }
+
+  initBubbles();
+
+  // Reuse bubbles by resetting their position after animation ends
+  document.querySelectorAll(".bubble").forEach((bubble) => {
+    bubble.addEventListener("animationiteration", () => {
+      const size = Math.random() * 20 + 10;
+      bubble.style.width = `${size}px`;
+      bubble.style.height = `${size}px`;
+      bubble.style.left = `${Math.random() * 100}vw`;
+    });
+  });
+  ///////////////////////////////////////////////////////////////////////////
+
+  const textArea = document.getElementById("my-text-area");
+  const easyMDE = new EasyMDE({
+    element: textArea,
+    autofocus: true,
+    uploadImage: true,
+    placeholder: "Start writing...",
+  });
+
+  easyMDE.codemirror.on("change", () => {
+    console.log("Markdown content:", easyMDE.value());
+  });
+</script>
+<!-- <canvas id="editor"></canvas> -->
+
+<!-- <script src="{{ url_for('static', filename='js/canvas.js') }}"></script> -->
+
+{% endblock %}
