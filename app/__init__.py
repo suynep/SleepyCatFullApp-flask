@@ -76,9 +76,9 @@ def index():
 def login():
     # creates dictionary of form data
     if request.method == "POST":
-        auth = request.form
+        auth = request.json
 
-        if not auth or not auth.get("username") or not auth.get("password"):
+        if not auth or not auth["username"] or not auth["password"]:
             # returns 401 if any email or / and password is missing
             return make_response(
                 "Could not verify",
