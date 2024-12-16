@@ -5,9 +5,13 @@
 In your terminal, run the following commands sequentially to install all the development dependencies:
 
 `git clone https://github.com/suynep/SleepyCatFullApp-flask.git SleepyCat`
+
 `cd SleepyCat/`
+
 `python3 -m virtualenv .venv`
+
 `source ./.venv/bin/activate`
+
 `pip3 install -r requirements.txt`
 
 Now, ensure you have a database connection set up at [https://mongodb.com] Cluster. 
