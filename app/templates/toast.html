@@ -1,0 +1,58 @@
+<div
+  class="toast-container position-fixed end-0 p-2 pt-0 toast-container-extra"
+  id="toast-stack-container"
+  style="bottom: 50px"
+>
+  {% for category, message in messages %} {% if category == 'danger' %}
+  <div
+    class="toast bg-danger align-items-center text-bg-danger border-0"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div class="d-flex">
+      <div class="toast-body">{{ message }}</div>
+      <button
+        type="button"
+        class="btn-close btn-close-white me-2 m-auto"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
+  {% endif %} {% if category == 'info' %}
+  <div
+    class="toast align-items-center bg-info text-bg-info border-0"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div class="d-flex">
+      <div class="toast-body">{{ message }}</div>
+      <button
+        type="button"
+        class="btn-close btn-close-white me-2 m-auto"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
+  {% endif %} {% if category == 'success' %}
+  <div
+    class="toast align-items-center bg-success text-bg-success border-0"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div class="d-flex">
+      <div class="toast-body">{{ message }}</div>
+      <button
+        type="button"
+        class="btn-close btn-close-white me-2 m-auto"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
+  {% endif %} {% endfor %}
+</div>

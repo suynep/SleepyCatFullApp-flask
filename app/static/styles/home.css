@@ -1,0 +1,61 @@
+/* static/styles/home.css */
+.writing-hand {
+    color: white;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.typewriter {
+  display: inline-block;
+  overflow: hidden;
+  border-right: 0.15em solid orange; /* Cursor color */
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: 0.15em;
+  animation: typing 3.5s steps(30, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 9em; /* Adjust based on the length of the text */
+  }
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: orange;
+  }
+}
+
+@keyframes change-text {
+  0%,
+  /* 70% {
+    content: "unleashed";
+  } */
+  100% {
+    content: "beautified";
+  }
+}
+
+.typewriter::after {
+  content: "unleashed";
+  animation: change-text 5s infinite;
+}

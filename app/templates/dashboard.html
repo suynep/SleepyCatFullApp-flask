@@ -34,7 +34,7 @@
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-3">
-      <div class="card  text-white mb-3" id="opacity-card">
+      <div class="card text-white mb-3" id="opacity-card">
         <div class="card-header">Profile</div>
         <div class="card-body">
           <h5 class="card-title"></h5>
@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="col-md-9">
-      <div class="card  text-white mb-3" id="opacity-card">
+      <div class="card text-white mb-3" id="opacity-card">
         <div class="card-header">Dashboard</div>
         <div class="card-body">
           <h5 class="card-title">
@@ -54,7 +54,7 @@
           </p>
         </div>
       </div>
-      <div class="card  text-white mb-3" id="opacity-card">
+      <div class="card text-white mb-3" id="opacity-card">
         <div class="card-header">Recent Activities</div>
         <div class="card-body">
           <p class="card-text">No recent activities.</p>
@@ -63,4 +63,13 @@
     </div>
   </div>
 </div>
+{% with messages = get_flashed_messages(with_categories=true) %} {% if messages
+%} {% include 'toast.html' %} {% endif %} {% endwith %}
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $(".toast").toast("show");
+  });
+</script>
 {% endblock %}

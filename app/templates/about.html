@@ -1,40 +1,62 @@
-{% extends "index.html" %}
-{% block content %}
+{% extends "index.html" %} {% block content %}
 <div class="container mt-5">
-    <div class="jumbotron bg-dark text-white p-5 rounded">
-        <h1 class="display-4">About SleePyCat 🦾😺</h1>
-        <p class="lead">SleePyCat is a simple journal application built with Flask and SQLite.</p>
-        <hr class="my-4">
-        <p>
-            It allows users to create an account, log in, and write journal entries. The application is built with Flask, a Python web framework, and MongoDB, a non-relational database engine. The application uses JSON web tokens to manage user sessions. The application is styled with Bootstrap, a popular CSS framework.
-        </p>
-    </div>
+  <div class="jumbotron bg-dark text-white p-5 rounded">
+    <h1 class="display-4">About SleePyCat 🦾😺</h1>
+    <p class="lead">
+      SleePyCat is a simple journal application built with Flask and SQLite.
+    </p>
+    <hr class="my-4" />
+    <p>
+      It allows users to create an account, log in, and write journal entries.
+      The application is built with Flask, a Python web framework, and MongoDB,
+      a non-relational database engine. The application uses JSON web tokens to
+      manage user sessions. The application is styled with Bootstrap, a popular
+      CSS framework.
+    </p>
+  </div>
 
-    <div class="row mt-5">
-        <div class="col-md-4">
-            <div class="card bg-secondary text-white mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Flask</h5>
-                    <p class="card-text">A lightweight WSGI web application framework in Python. 👨‍🔬</p>
-                </div>
-            </div>
+  <div class="row mt-5">
+    <div class="col-md-4">
+      <div class="card bg-secondary text-white mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Flask</h5>
+          <p class="card-text">
+            A lightweight WSGI web application framework in Python. 👨‍🔬
+          </p>
         </div>
-        <div class="col-md-4">
-            <div class="card bg-secondary text-white mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">MongoDB</h5>
-                    <p class="card-text">A Non-relational DB that's hosted remotely somewhere... 🧑‍🚀</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-secondary text-white mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Bootstrap</h5>
-                    <p class="card-text">The most popular CSS framework for developing responsive and mobile-first websites. 🎨</p>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="col-md-4">
+      <div class="card bg-secondary text-white mb-3">
+        <div class="card-body">
+          <h5 class="card-title">MongoDB</h5>
+          <p class="card-text">
+            A Non-relational DB that's hosted remotely somewhere... 🧑‍🚀
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card bg-secondary text-white mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Bootstrap</h5>
+          <p class="card-text">
+            The most popular CSS framework for developing responsive and
+            mobile-first websites. 🎨
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+{% with messages = get_flashed_messages(with_categories=true) %} {% if messages
+%} {% include "toast.html" %} {% endif %} {% endwith %}
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $(".toast").toast("show");
+  });
+</script>
 {% endblock %}

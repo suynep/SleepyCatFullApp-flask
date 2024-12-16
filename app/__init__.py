@@ -47,6 +47,7 @@ def token_required(f):
         if "jwt" in session:
             token = session["jwt"]
         if not token:
+            flash("Token is missing. Please Log in.", "danger")
             return jsonify({"message": "Token is missing !!"}), 401
 
         try:
@@ -54,6 +55,7 @@ def token_required(f):
             data = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
             current_user = users_collection.find_one({"_id": ObjectId(data["id"])})
         except:
+            flash("Token is invalid. Please Log in.", "danger")
             return jsonify({"message": "Token is invalid !!"}), 401
         # returns the current logged in users context to the routes
         return f(current_user, *args, **kwargs)
@@ -72,13 +74,13 @@ def token_required(f):
 @app.errorhandler(403)
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template("404.html"), 401
+    return render_template("404.html", error_message=e), 401
 
 
 @app.route("/")
 @app.route("/index")
 def index():
-    return render_template("index.html")
+    return render_template("home.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -97,22 +99,24 @@ def login():
         if not user:
             # returns 401 if user does not exist
             flash("User does not exist. Please register.", "danger")
-            # return render_template("404.html", error_msg="Could not verify"), 401
+            # return render_template("login.html")
 
-        if check_password_hash(user["password"], auth.get("password")):
-            # generates the JWT Token
-            token = jwt.encode(
-                {
-                    "id": str(user["_id"]),
-                    "exp": datetime.utcnow() + timedelta(minutes=30),
-                },
-                app.config["SECRET_KEY"],
-                algorithm="HS256",
-            )
-            session["jwt"] = token
-            return redirect(url_for("dashboard"))
-        # returns 403 if password is wrong
-        flash("Wrong password. Please try again.", "danger")
+        if user:
+            if check_password_hash(user["password"], auth.get("password")):
+                # generates the JWT Token
+                token = jwt.encode(
+                    {
+                        "id": str(user["_id"]),
+                        "exp": datetime.utcnow() + timedelta(minutes=30),
+                    },
+                    app.config["SECRET_KEY"],
+                    algorithm="HS256",
+                )
+                session["jwt"] = token
+                flash("Logged in successfully.", "success")
+                return redirect(url_for("dashboard"))
+            # returns 403 if password is wrong
+            flash("Wrong password. Please try again.", "danger")
         # return jsonify({"message": "wrong password"}), 403
     return render_template("login.html")
 
@@ -129,6 +133,7 @@ def signup():
 
         if password != confirm_password:
             flash("Passwords do not match. Please try again.", "danger")
+            return redirect(url_for("signup"))
 
         # checking for existing user
         user = users_collection.find_one({"username": username})
@@ -174,7 +179,8 @@ def journal(current_user):
 @app.route("/logout", methods=["GET"])
 def logout():
     session.pop("jwt", None)  # Remove the JWT from the session
-    return redirect(url_for("index"))
+    flash("Logged out successfully.", "success")
+    return redirect(url_for("about"))
 
 
 @socketio.on("analyse")
