@@ -4,6 +4,8 @@ from pymongo.server_api import ServerApi
 from os import getenv
 from dotenv import load_dotenv
 from flask_socketio import SocketIO
+import eventlet
+eventlet.monkey_patch()
 
 load_dotenv()
 
