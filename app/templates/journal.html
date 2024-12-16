@@ -8,8 +8,14 @@
 <!-- <script src="{{ url_for('static', filename='js/p5.js') }}"></script> -->
 <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css" />
 <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<script
+  src="https://cdn.socket.io/4.8.1/socket.io.min.js"
+  integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
+  crossorigin="anonymous"
+></script>
 {% endblock %} {% block content %}
 <textarea id="my-text-area"></textarea>
+<button id="save" class="btn btn-primary" >Save</button>
 <div class="bubbles">
   <!-- Generate multiple bubble divs using JavaScript -->
 </div>
@@ -62,10 +68,20 @@
     uploadImage: true,
     placeholder: "Start writing...",
   });
+  var socket = io();
 
   easyMDE.codemirror.on("change", () => {
-    console.log("Markdown content:", easyMDE.value());
+    socket.emit("analyse", { data: easyMDE.value() });
   });
+
+  const saveButton = document.getElementById("save");
+  saveButton.addEventListener("click", () => {
+    socket.emit("save", { data: easyMDE.value() });
+  });
+
+  // setTimeout(() => {
+  //   socket.emit("save", {data: easyMDE.value()});
+  // }, 10000);
 </script>
 <!-- <canvas id="editor"></canvas> -->
 

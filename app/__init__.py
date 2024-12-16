@@ -3,6 +3,7 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from os import getenv
 from dotenv import load_dotenv
+from flask_socketio import SocketIO
 
 load_dotenv()
 
@@ -34,6 +35,7 @@ from app.models import User, Journal
 from bson import ObjectId
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 app.config.from_object("config.Config")
 
 
@@ -42,8 +44,8 @@ def token_required(f):
     def decorated(*args, **kwargs):
         token = None
         # jwt is passed in the Auth request header
-        if "Authorization" in request.headers:
-            token = request.headers["Authorization"].split(" ")[1]
+        if "jwt" in session:
+            token = session["jwt"]
         if not token:
             return jsonify({"message": "Token is missing !!"}), 401
 
@@ -58,12 +60,19 @@ def token_required(f):
 
     return decorated
 
-@app.before_request
-def auto_set_authorization_header():
-    if "jwt" in session:
-        # Add the Authorization header to the request object
-        request.headers.environ["HTTP_AUTHORIZATION"] = f"Bearer {session['jwt']}"
 
+# @app.before_request
+# def auto_set_authorization_header():
+#     if "jwt" in session:
+#         # Add the Authorization header to the request object
+#         request.headers.environ["HTTP_AUTHORIZATION"] = f"Bearer {session['jwt']}"
+
+
+@app.errorhandler(401)
+@app.errorhandler(403)
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"), 401
 
 
 @app.route("/")
@@ -80,21 +89,15 @@ def login():
 
         if not auth or not auth.get("username") or not auth.get("password"):
             # returns 401 if any email or / and password is missing
-            return make_response(
-                "Could not verify",
-                401,
-                {"WWW-Authenticate": 'Basic realm ="Login required !!"'},
-            )
+            flash("Please enter both username and password", "danger")
+            # return render_template("404.html", error_msg="Could not verify"), 401
 
         user = users_collection.find_one({"username": auth.get("username")})
 
         if not user:
             # returns 401 if user does not exist
-            return make_response(
-                "Could not verify",
-                401,
-                {"WWW-Authenticate": 'Basic realm ="User does not exist !!"'},
-            )
+            flash("User does not exist. Please register.", "danger")
+            # return render_template("404.html", error_msg="Could not verify"), 401
 
         if check_password_hash(user["password"], auth.get("password")):
             # generates the JWT Token
@@ -109,7 +112,8 @@ def login():
             session["jwt"] = token
             return redirect(url_for("dashboard"))
         # returns 403 if password is wrong
-        return jsonify({"message": "wrong password"}), 403
+        flash("Wrong password. Please try again.", "danger")
+        # return jsonify({"message": "wrong password"}), 403
     return render_template("login.html")
 
 
@@ -141,7 +145,7 @@ def signup():
 
             # insert user into the database
             users_collection.insert_one(user_data)
-
+            flash("User created successfully. Please Log in.", "success")
             return redirect(url_for("login"))
         else:
             # returns 202 if user already exists
@@ -171,4 +175,19 @@ def journal(current_user):
 def logout():
     session.pop("jwt", None)  # Remove the JWT from the session
     return redirect(url_for("index"))
-    
+
+
+@socketio.on("analyse")
+def handle_analyse(json):
+    print("received json: " + str(json))
+
+
+@socketio.on("save")
+def handle_save(json):
+    print("received json: " + str(json))
+    body = json["data"]
+    user_id = jwt.decode(
+        session["jwt"], app.config["SECRET_KEY"], algorithms=["HS256"]
+    )["id"]
+    journals_collection.insert_one({"body": body, "user_id": user_id})
+    print("Journal saved successfully")
