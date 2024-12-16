@@ -76,9 +76,9 @@ def index():
 def login():
     # creates dictionary of form data
     if request.method == "POST":
-        auth = request.json
+        auth = request.form
 
-        if not auth or not auth["username"] or not auth["password"]:
+        if not auth or not auth.get("username") or not auth.get("password"):
             # returns 401 if any email or / and password is missing
             return make_response(
                 "Could not verify",
@@ -131,6 +131,7 @@ def signup():
         if not user:
             # create a dictionary for the user
             hashed_password = generate_password_hash(password)
+
             user_data = {
                 "username": username,
                 "email": email,
@@ -154,20 +155,20 @@ def about():
 
 
 @app.route("/dashboard")
-# @token_required
-def dashboard():
-    # print(current_user + " accessed dashboard")
-    return render_template("dashboard.html")
+@token_required
+def dashboard(current_user):
+    print(session["jwt"])
+    return render_template("dashboard.html", user=current_user)
 
 
 @app.route("/journal")
-# @token_required
-def journal():
-    return render_template("journal.html")
+@token_required
+def journal(current_user):
+    return render_template("journal.html", user=current_user)
 
 
-@app.route("/logout", methods=["POST"])
+@app.route("/logout", methods=["GET"])
 def logout():
     session.pop("jwt", None)  # Remove the JWT from the session
-    return jsonify({"message": "Logged out successfully"}), 200
+    return redirect(url_for("index"))
     
