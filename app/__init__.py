@@ -4,8 +4,6 @@ from pymongo.server_api import ServerApi
 from os import getenv
 from dotenv import load_dotenv
 from flask_socketio import SocketIO
-import eventlet
-eventlet.monkey_patch()
 
 load_dotenv()
 
@@ -172,10 +170,19 @@ def dashboard(current_user):
     return render_template("dashboard.html", user=current_user)
 
 
+@app.route("/journal/<journal_id>")
+@token_required
+def journal_entry(current_user, journal_id):
+    # journal = journals_collection.find_one({"_id": ObjectId(journal_id)})
+    return render_template("journal.html", user=current_user, journalid=journal_id)
+
+
 @app.route("/journal")
 @token_required
 def journal(current_user):
-    return render_template("journal.html", user=current_user)
+    entries = journals_collection.find({"user_id": str(current_user["_id"])})
+    print(entries)
+    return render_template("journalmenu.html", user=current_user, entries=entries)
 
 
 @app.route("/logout", methods=["GET"])
@@ -190,12 +197,44 @@ def handle_analyse(json):
     print("received json: " + str(json))
 
 
+@socketio.on("join")
+def update_journal(json):
+    print("received json: " + str(json))
+    journal_id = json["journalid"]
+    journal = journals_collection.find_one({"_id": ObjectId(journal_id)})
+    socketio.emit("update", {"data": journal["body"]})
+
+
 @socketio.on("save")
 def handle_save(json):
-    print("received json: " + str(json))
-    body = json["data"]
     user_id = jwt.decode(
         session["jwt"], app.config["SECRET_KEY"], algorithms=["HS256"]
     )["id"]
-    journals_collection.insert_one({"body": body, "user_id": user_id})
-    print("Journal saved successfully")
+    journal_id = journals_collection.find_one({"_id": ObjectId(json["journalid"])})
+    if not journal_id:
+        print("Creating new journal" + str(json))
+        body = json["data"]
+        journals_collection.insert_one({"body": body, "user_id": user_id})
+        print("Journal created + saved successfully")
+    else:
+        print("Updating journal" + str(json))
+        journals_collection.update_one(
+            {"_id": ObjectId(json["journalid"])}, {"$set": {"body": json["data"]}}
+        )
+        print("Journal updated + saved successfully")
+
+
+@app.route("/create_entry", methods=["GET"])
+@token_required
+def create_entry(current_user):
+    title = "Untitled"
+    user_id = jwt.decode(
+        session["jwt"], app.config["SECRET_KEY"], algorithms=["HS256"]
+    )["id"]
+    req_journal = journals_collection.insert_one(
+        {"body": "", "user_id": user_id, "title": title}
+    )
+    journal_id = str(req_journal.inserted_id)
+    flash("Journal entry created successfully.", "success")
+    return redirect(url_for("journal_entry", journal_id=journal_id))
+    # return render_template("create_entry.html", user=current_user, journal_id=journal_id)

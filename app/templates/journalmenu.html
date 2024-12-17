@@ -1,0 +1,49 @@
+{% extends "index.html" %} {% block content %}
+<div class="container mt-5">
+  <div class="jumbotron bg-dark text-white p-5 rounded">
+    <h1 class="display-4">Journal 📓</h1>
+    <p class="lead">
+      Welcome to the journal menu! Here you can create, read, update, and delete
+      journal entries. 📝
+    </p>
+    <hr class="my-4" />
+    <p>
+      To get started, click on the "Create Entry" button to create a new journal
+      entry. You can also click on the "View Entries" button to view all of your
+      journal entries. 📖
+    </p>
+  </div>
+
+  <a href="{{ url_for('create_entry') }}" class="btn btn-primary btn-block mt-3"
+    >Create Entry</a
+  >
+  {% if entries %}
+  <h4 class="mt-3 text-white">Journal Entries</h4>
+  {% for entry in entries %}
+  <div class="card mt-3 bg-dark text-white">
+    <div class="card-body">
+      <h5 class="card-title">{{ entry.title }}</h5>
+      <p class="card-text">{{ entry.body[:20] }}</p>
+      <a
+        href="{{ url_for('journal_entry', journal_id=entry._id) }}"
+        class="btn btn-primary"
+        >Edit</a
+      >
+    </div>
+  </div>
+  {% endfor %} {% else %}
+  <div class="alert alert-info mt-3" role="alert">
+    You have no journal entries. Click on the "Create Entry" button to create
+    your first journal entry. 📝
+  </div>
+  {% endif %}
+</div>
+{% with messages = get_flashed_messages(with_categories=true) %} {% if messages
+%} {% include "toast.html" %} {% endif %} {% endwith %}
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $(".toast").toast("show");
+  });
+</script>
+{% endblock %}

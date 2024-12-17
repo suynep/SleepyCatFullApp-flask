@@ -14,8 +14,9 @@
   crossorigin="anonymous"
 ></script>
 {% endblock %} {% block content %}
+<p class="text-white">📓 #<span id="journalID">{{ journalid }}</span></p>
 <textarea id="my-text-area"></textarea>
-<button id="save" class="btn btn-primary" >Save</button>
+<button id="save" class="btn btn-primary">Save</button>
 <div class="bubbles">
   <!-- Generate multiple bubble divs using JavaScript -->
 </div>
@@ -75,10 +76,33 @@
   });
 
   const saveButton = document.getElementById("save");
+
+  function disableSave() {
+    document.getElementById("save").disabled = true;
+    document.getElementById("save").innerHTML = "Saving...";
+    setTimeout(function () {
+      document.getElementById("save").disabled = false;
+      document.getElementById("save").innerHTML = "Save";
+    }, 3000);
+  }
   saveButton.addEventListener("click", () => {
-    socket.emit("save", { data: easyMDE.value() });
+    socket.emit("save", {
+      data: easyMDE.value(),
+      journalid: document.getElementById("journalID").innerText,
+    });
+    disableSave();
   });
 
+  socket.on("connect", () => {
+    socket.emit("join", {
+      journalid: document.getElementById("journalID").innerText,
+    });
+    console.log("Connected to server");
+  });
+
+  socket.on("update", (data) => {
+    easyMDE.value(data.data);
+  });
   // setTimeout(() => {
   //   socket.emit("save", {data: easyMDE.value()});
   // }, 10000);
@@ -86,5 +110,14 @@
 <!-- <canvas id="editor"></canvas> -->
 
 <!-- <script src="{{ url_for('static', filename='js/canvas.js') }}"></script> -->
+
+{% with messages = get_flashed_messages(with_categories=true) %} {% if messages
+%} {% include "toast.html" %} {% endif %} {% endwith %}
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $(".toast").toast("show");
+  });
+</script>
 
 {% endblock %}
