@@ -24,9 +24,13 @@
     <div class="card-body">
       <h5 class="card-title">{{ entry.title }}</h5>
       <p class="card-text">{{ entry.body[:20] }}</p>
+      <small class="card-text">
+        {{ entry.created.strftime('%B %d, %Y') }}</small
+      >
+      <br />
       <a
         href="{{ url_for('journal_entry', journal_id=entry._id) }}"
-        class="btn btn-primary"
+        class="btn btn-primary card-text"
         >Edit</a
       >
     </div>

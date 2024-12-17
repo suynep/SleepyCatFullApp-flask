@@ -4,6 +4,7 @@ from pymongo.server_api import ServerApi
 from os import getenv
 from dotenv import load_dotenv
 from flask_socketio import SocketIO
+from app.ai import sentiment_analyser, color_mapper
 
 load_dotenv()
 
@@ -107,7 +108,7 @@ def login():
                 token = jwt.encode(
                     {
                         "id": str(user["_id"]),
-                        "exp": datetime.utcnow() + timedelta(minutes=30),
+                        "exp": datetime.utcnow() + timedelta(hours=1),
                     },
                     app.config["SECRET_KEY"],
                     algorithm="HS256",
@@ -194,7 +195,8 @@ def logout():
 
 @socketio.on("analyse")
 def handle_analyse(json):
-    print("received json: " + str(json))
+    print("data: ", json["data"], "\n", sentiment_analyser(json["data"]), color_mapper(sentiment_analyser(json["data"])))
+    socketio.emit("ui_update", {"color": color_mapper(sentiment_analyser(json["data"]))})
 
 
 @socketio.on("join")
@@ -221,6 +223,10 @@ def handle_save(json):
         journals_collection.update_one(
             {"_id": ObjectId(json["journalid"])}, {"$set": {"body": json["data"]}}
         )
+        socketio.emit(
+            "ui_update", {"color": color_mapper(sentiment_analyser(json["data"]))}
+        )
+        print("data: ", json["data"], "\n", sentiment_analyser(json["data"]), color_mapper(sentiment_analyser(json["data"])))
         print("Journal updated + saved successfully")
 
 
@@ -232,7 +238,7 @@ def create_entry(current_user):
         session["jwt"], app.config["SECRET_KEY"], algorithms=["HS256"]
     )["id"]
     req_journal = journals_collection.insert_one(
-        {"body": "", "user_id": user_id, "title": title}
+        {"body": "", "user_id": user_id, "title": title, "created": datetime.now()}
     )
     journal_id = str(req_journal.inserted_id)
     flash("Journal entry created successfully.", "success")

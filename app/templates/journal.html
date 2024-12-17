@@ -71,8 +71,14 @@
   });
   var socket = io();
 
+  const terminatingChars = [" ", ".", ",", "!", "?", "\n"];
   easyMDE.codemirror.on("change", () => {
-    socket.emit("analyse", { data: easyMDE.value() });
+    if (easyMDE.value().length > 0) {
+      let lastChar = easyMDE.value().slice(-1);
+      if (terminatingChars.includes(lastChar)) {
+        socket.emit("analyse", { data: easyMDE.value() });
+      }
+    }
   });
 
   const saveButton = document.getElementById("save");
@@ -102,6 +108,13 @@
 
   socket.on("update", (data) => {
     easyMDE.value(data.data);
+  });
+
+  socket.on("ui_update", (data) => {
+    bubbles = document.querySelectorAll(".bubble");
+    bubbles.forEach((bubble) => {
+      bubble.style.background = data.color;
+    });
   });
   // setTimeout(() => {
   //   socket.emit("save", {data: easyMDE.value()});
