@@ -96,25 +96,27 @@
     setTimeout(function () {
       document.getElementById("save").disabled = false;
       document.getElementById("save").innerHTML = "Save";
-    }, 3000);
+    }, 2000);
   }
   saveButton.addEventListener("click", () => {
     socket.emit("save", {
       data: easyMDE.value(),
-      journalid: document.getElementById("journalID").innerText,
+      journalid: window.location.pathname.split("/").pop()
     });
     disableSave();
   });
 
   socket.on("connect", () => {
     socket.emit("join", {
-      journalid: document.getElementById("journalID").innerText,
+      journalid: window.location.pathname.split("/").pop()
+ 
     });
     console.log("Connected to server");
   });
 
   socket.on("update", (data) => {
     easyMDE.value(data.data);
+    document.getElementById("journalID").value = data.title
   });
 
   socket.on("ui_update", (data) => {

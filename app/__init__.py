@@ -215,7 +215,7 @@ def update_journal(json):
     print("received json: " + str(json))
     journal_id = json["journalid"]
     journal = journals_collection.find_one({"_id": ObjectId(journal_id)})
-    socketio.emit("update", {"data": journal["body"]})
+    socketio.emit("update", {"data": journal["body"], "title": journal["title"]})
 
 @socketio.on("update_title")
 def update_journal_title(json):
