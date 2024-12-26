@@ -1,6 +1,6 @@
 /* static/styles/home.css */
 .writing-hand {
-    color: white;
+  color: white;
   animation: pulse 1.5s infinite;
 }
 
@@ -58,4 +58,40 @@
 .typewriter::after {
   content: "unleashed";
   animation: change-text 5s infinite;
+}
+
+.bg-class {
+  background-image: url("../wp2729921.gif");
+  background-size: contain;
+  border-radius: 2em;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .bg-class {
+    height: 60vh;
+    background-size: cover;
+    background-position: 90% center;
+    padding: 0.5em;
+  }
+
+  .writing-hand svg {
+    width: 80px;
+    height: 80px;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  .typewrite {
+    font-size: 1.2em;
+  }
 }
