@@ -14,7 +14,14 @@
   crossorigin="anonymous"
 ></script>
 {% endblock %} {% block content %}
-<p class="text-white">📓 #<span id="journalID">{{ journalid }}</span></p>
+<p class="text-white">
+  📓 #<input
+    type="text"
+    id="journalID"
+    value="{{ journalid }}"
+    class="form-control d-inline-block w-auto"
+  />
+</p>
 <textarea id="my-text-area"></textarea>
 <button id="save" class="btn btn-primary">Save</button>
 <div class="bubbles">
@@ -116,6 +123,20 @@
       bubble.style.background = data.color;
     });
   });
+
+  // Update the title dynamically
+  const journalIDInput = document.getElementById("journalID");
+  journalIDInput.addEventListener("input", () => {
+    document.title = `Journal - ${journalIDInput.value}`;
+  });
+  journalIDInput.addEventListener("blur", () => {
+    const newTitle = journalIDInput.value;
+    const id = window.location.pathname.split("/").pop()
+    socket.emit("update_title", { title: newTitle, journalID: id });
+
+  });
+
+
   // setTimeout(() => {
   //   socket.emit("save", {data: easyMDE.value()});
   // }, 10000);

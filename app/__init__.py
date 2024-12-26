@@ -177,6 +177,17 @@ def journal_entry(current_user, journal_id):
     # journal = journals_collection.find_one({"_id": ObjectId(journal_id)})
     return render_template("journal.html", user=current_user, journalid=journal_id)
 
+@app.route("/journal/delete/<journal_id>")
+@token_required
+def delete_journal(current_user, journal_id):
+    print(journal_id)
+    result = journals_collection.delete_one({"_id": ObjectId(journal_id)})
+    print(result.raw_result)
+    if result.deleted_count == 1:
+        print(f"Successfully deleted: <{journal_id}>")
+
+    entries = journals_collection.find({"user_id": str(current_user["_id"])})
+    return render_template("journalmenu.html", user=current_user, entries=entries)
 
 @app.route("/journal")
 @token_required
@@ -205,6 +216,22 @@ def update_journal(json):
     journal_id = json["journalid"]
     journal = journals_collection.find_one({"_id": ObjectId(journal_id)})
     socketio.emit("update", {"data": journal["body"]})
+
+@socketio.on("update_title")
+def update_journal_title(json):
+    print("received title" + str(json))
+    new_title = json["title"]
+    journal_id = json["journalID"]
+    result = journals_collection.update_one(
+        {"_id": ObjectId(journal_id)},
+        {"$set": {"title": new_title}}
+    )
+    if result.modified_count > 0:
+        print(f"Journal title updated to: {new_title}")
+        socketio.emit("title_updated", {"status": "success"})
+    else:
+        print("Failed to update journal title")
+        socketio.emit("title_updated", {"status": "failure"})
 
 
 @socketio.on("save")

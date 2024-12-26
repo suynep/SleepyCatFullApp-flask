@@ -28,11 +28,18 @@
         {{ entry.created.strftime('%B %d, %Y') }}</small
       >
       <br />
-      <a
-        href="{{ url_for('journal_entry', journal_id=entry._id) }}"
-        class="btn btn-primary card-text"
-        >Edit</a
-      >
+      <div class="flex">
+        <a
+          href="{{ url_for('journal_entry', journal_id=entry._id) }}"
+          class="btn btn-primary card-text"
+          >Edit</a
+        >
+        <a
+          href="{{ url_for('delete_journal', journal_id=entry._id) }}"
+          class="btn btn-danger card-text"
+          >Delete</a
+        >
+      </div>
     </div>
   </div>
   {% endfor %} {% else %}
