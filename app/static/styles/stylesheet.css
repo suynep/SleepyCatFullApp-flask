@@ -106,3 +106,12 @@ body {
   transform: translate3d(0px, -5px, 0px);
   color: #316ce8;
 }
+
+.team-container {
+  background-color: #0e0e0e;
+  border-radius: 2em;
+}
+
+.about-container {
+  background-color: #0e0e0e;
+}
