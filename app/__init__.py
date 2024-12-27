@@ -36,7 +36,7 @@ from app.models import User, Journal
 from bson import ObjectId
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app) #, async_mode='asyncio', cors_allowed_origins="*")
 app.config.from_object("config.Config")
 
 
@@ -233,28 +233,54 @@ def update_journal_title(json):
         print("Failed to update journal title")
         socketio.emit("title_updated", {"status": "failure"})
 
-
-@socketio.on("save")
-def handle_save(json):
+@app.route("/save", methods=["PUT"])
+@token_required
+def handle_save(current_user):
     user_id = jwt.decode(
         session["jwt"], app.config["SECRET_KEY"], algorithms=["HS256"]
     )["id"]
-    journal_id = journals_collection.find_one({"_id": ObjectId(json["journalid"])})
+
+    data = request.get_json()
+
+    journal_id = journals_collection.find_one({"_id": ObjectId(data["journalid"])})
     if not journal_id:
-        print("Creating new journal" + str(json))
-        body = json["data"]
+        print("Creating new journal" + str(data))
+        body = data["data"]
         journals_collection.insert_one({"body": body, "user_id": user_id})
         print("Journal created + saved successfully")
     else:
-        print("Updating journal" + str(json))
+        print("Updating journal" + str(data))
         journals_collection.update_one(
-            {"_id": ObjectId(json["journalid"])}, {"$set": {"body": json["data"]}}
+            {"_id": ObjectId(data["journalid"])}, {"$set": {"body": data["data"]}}
         )
         socketio.emit(
-            "ui_update", {"color": color_mapper(sentiment_analyser(json["data"]))}
+            "ui_update", {"color": color_mapper(sentiment_analyser(data["data"]))}
         )
-        print("data: ", json["data"], "\n", sentiment_analyser(json["data"]), color_mapper(sentiment_analyser(json["data"])))
+        print("data: ", data["data"], "\n", sentiment_analyser(data["data"]), color_mapper(sentiment_analyser(data["data"])))
         print("Journal updated + saved successfully")
+    return redirect(url_for("journal_entry", current_user=current_user, journal_id=data["journalid"]))
+
+# @socketio.on("save")
+# def handle_save(json):
+#     user_id = jwt.decode(
+#         session["jwt"], app.config["SECRET_KEY"], algorithms=["HS256"]
+#     )["id"]
+#     journal_id = journals_collection.find_one({"_id": ObjectId(json["journalid"])})
+#     if not journal_id:
+#         print("Creating new journal" + str(json))
+#         body = json["data"]
+#         journals_collection.insert_one({"body": body, "user_id": user_id})
+#         print("Journal created + saved successfully")
+#     else:
+#         print("Updating journal" + str(json))
+#         journals_collection.update_one(
+#             {"_id": ObjectId(json["journalid"])}, {"$set": {"body": json["data"]}}
+#         )
+#         socketio.emit(
+#             "ui_update", {"color": color_mapper(sentiment_analyser(json["data"]))}
+#         )
+#         print("data: ", json["data"], "\n", sentiment_analyser(json["data"]), color_mapper(sentiment_analyser(json["data"])))
+#         print("Journal updated + saved successfully")
 
 
 @app.route("/create_entry", methods=["GET"])

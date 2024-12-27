@@ -98,25 +98,50 @@
       document.getElementById("save").innerHTML = "Save";
     }, 2000);
   }
-  saveButton.addEventListener("click", () => {
-    socket.emit("save", {
+  saveButton.addEventListener("click", function () {
+    const dataToUpdate = {
+      // Your data here
       data: easyMDE.value(),
-      journalid: window.location.pathname.split("/").pop()
-    });
+      journalid: window.location.pathname.split("/").pop(),
+    };
+
+    fetch("/save", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToUpdate),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((data) => {
+        console.log(data.message);
+        // Handle success, e.g., display a message to the user
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+        // Handle error, e.g., display an error message to the user
+      });
     disableSave();
   });
+  // saveButton.addEventListener("click", () => {
+  //   socket.emit("save", {});
+  // });
 
   socket.on("connect", () => {
     socket.emit("join", {
-      journalid: window.location.pathname.split("/").pop()
- 
+      journalid: window.location.pathname.split("/").pop(),
     });
     console.log("Connected to server");
   });
 
   socket.on("update", (data) => {
     easyMDE.value(data.data);
-    document.getElementById("journalID").value = data.title
+    document.getElementById("journalID").value = data.title;
   });
 
   socket.on("ui_update", (data) => {
@@ -133,11 +158,9 @@
   });
   journalIDInput.addEventListener("blur", () => {
     const newTitle = journalIDInput.value;
-    const id = window.location.pathname.split("/").pop()
+    const id = window.location.pathname.split("/").pop();
     socket.emit("update_title", { title: newTitle, journalID: id });
-
   });
-
 
   // setTimeout(() => {
   //   socket.emit("save", {data: easyMDE.value()});

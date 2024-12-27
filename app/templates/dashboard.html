@@ -35,10 +35,199 @@
   <div class="row">
     <div class="col-md-3">
       <div class="card text-white mb-3" id="opacity-card">
-        <div class="card-header">Profile</div>
+        <div class="card-header">Your Profile</div>
         <div class="card-body">
+          <!-- <div class="col-lg-3 mb-4 text-white"> -->
+          <!-- Row -->
+          <div class="row">
+            <div class="col-md-12">
+              <img
+                src="{{ url_for('static', filename='suyashnepal.jpg') }}"
+                alt="wrapkit"
+                class="img-fluid rounded-circle"
+              />
+            </div>
+            <div class="col-md-12 text-center">
+              <div class="pt-2">
+                <h5 class="mt-4 font-weight-medium mb-0 text-primary">
+                  {{ user.username }}
+                </h5>
+                <!-- <h6 class="subtitle mb-3">Programmer</h6> -->
+                <p>Add a bio...</p>
+                <ul class="list-inline">
+                  <li class="list-inline-item">
+                    <a href="#" class="text-decoration-none d-block px-1"
+                      ><i class="fa fa-facebook"></i
+                    ></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#" class="text-decoration-none d-block px-1"
+                      ><i class="fa fa-twitter"></i
+                    ></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#" class="text-decoration-none d-block px-1"
+                      ><i class="fa fa-instagram"></i
+                    ></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#" class="text-decoration-none d-block px-1"
+                      ><i class="fa fa-github"></i
+                    ></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
           <h5 class="card-title"></h5>
           <p class="card-text"></p>
+          <!-- Accordion Section: To-Dos, Goals, Tracker -->
+          <div
+            class="accordion"
+            id="accordionExample"
+            style="
+              background-color: #161616;
+              color: white;
+              border-radius: 10px;
+              padding: 10px;
+            "
+          >
+            <!-- To-Dos -->
+            <div
+              class="accordion-item"
+              style="background-color: #222; border-radius: 10px"
+            >
+              <h2 class="accordion-header" id="headingOne">
+                <button
+                  class="accordion-button text-white"
+                  style="background-color: #333; border: none"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseOne"
+                  aria-expanded="false"
+                  aria-controls="collapseOne"
+                >
+                  To-Dos
+                </button>
+              </h2>
+              <div
+                id="collapseOne"
+                class="accordion-collapse collapse show"
+                aria-labelledby="headingOne"
+                data-bs-parent="#accordionExample"
+              >
+                <div class="accordion-body">
+                  <ul>
+                    <li contenteditable="true" style="color: white">
+                      Placeholder To-Do 1
+                    </li>
+                    <li contenteditable="true" style="color: white">
+                      Placeholder To-Do 2
+                    </li>
+                    <li contenteditable="true" style="color: white">
+                      Placeholder To-Do 3
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- Goals -->
+            <div
+              class="accordion-item"
+              style="background-color: #222; border-radius: 10px"
+            >
+              <h2 class="accordion-header" id="headingTwo">
+                <button
+                  class="accordion-button collapsed text-white"
+                  style="background-color: #333; border: none"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseTwo"
+                  aria-expanded="false"
+                  aria-controls="collapseTwo"
+                >
+                  Goals
+                </button>
+              </h2>
+              <div
+                id="collapseTwo"
+                class="accordion-collapse collapse"
+                aria-labelledby="headingTwo"
+                data-bs-parent="#accordionExample"
+              >
+                <div class="accordion-body">
+                  <ul>
+                    <li contenteditable="true" style="color: white">
+                      Placeholder Goal 1
+                    </li>
+                    <li contenteditable="true" style="color: white">
+                      Placeholder Goal 2
+                    </li>
+                    <li contenteditable="true" style="color: white">
+                      Placeholder Goal 3
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- Tracker -->
+            <div
+              class="accordion-item"
+              style="background-color: #222; border-radius: 5px"
+            >
+              <h2 class="accordion-header" id="headingThree">
+                <button
+                  class="accordion-button collapsed text-white"
+                  style="background-color: #333; border: none"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseThree"
+                  aria-expanded="false"
+                  aria-controls="collapseThree"
+                >
+                  Tracker
+                </button>
+              </h2>
+              <div
+                id="collapseThree"
+                class="accordion-collapse collapse"
+                aria-labelledby="headingThree"
+                data-bs-parent="#accordionExample"
+              >
+                <div class="accordion-body">
+                  <ul>
+                    <li contenteditable="true" style="color: white">
+                      Placeholder Track 1
+                    </li>
+                    <li contenteditable="true" style="color: white">
+                      Placeholder Track 2
+                    </li>
+                    <li contenteditable="true" style="color: white">
+                      Placeholder Track 3
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <button
+                class="btn btn-link text-white mt-2 d-block"
+                id="settingsBtn"
+                style="text-decoration: none"
+                onclick="window.location.href='/settings'"
+              >
+                Settings
+              </button>
+
+              <button
+                class="btn btn-link text-white mt-0 d-block"
+                id="AnalyticsBtn"
+                style="text-decoration: none"
+                onclick="window.location.href='/analytics'"
+              >
+                Analytics
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -58,6 +247,121 @@
         <div class="card-header">Recent Activities</div>
         <div class="card-body">
           <p class="card-text">No recent activities.</p>
+        </div>
+      </div>
+
+      <div class="jumbotron">
+        <div class="row w-100">
+          <div class="col-md-3">
+            <div class="card bg-dark border-info mx-sm-1 p-3">
+              <!-- <div class="card border-info shadow text-info p-3 my-card">
+                <span class="fa fa-car" aria-hidden="true"></span>
+              </div> -->
+              <div class="text-info text-center mt-3">
+                <h4>Words written</h4>
+              </div>
+              <div class="text-info text-center mt-2"><h1>234</h1></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-dark border-success mx-sm-1 p-3">
+              <!-- <div class="card border-success shadow text-success p-3 my-card">
+                <span class="fa fa-eye" aria-hidden="true"></span>
+              </div> -->
+              <div class="text-success text-center mt-3">
+                <h4>Streak🔥</h4>
+              </div>
+              <div class="text-success text-center mt-2"><h1>9332</h1></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-dark border-danger mx-sm-1 p-3">
+              <!-- <div class="card border-danger shadow text-danger p-3 my-card">
+                <span class="fa fa-heart" aria-hidden="true"></span>
+              </div> -->
+              <div class="text-danger text-center mt-3">
+                <h4>Emotions ✅</h4>
+              </div>
+              <div class="text-danger text-center mt-2"><h1>346</h1></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-dark border-warning mx-sm-1 p-3">
+              <!-- <div class="card border-warning shadow text-warning p-3 my-card">
+                <span class="fa fa-inbox" aria-hidden="true"></span>
+              </div> -->
+              <div class="text-warning text-center mt-3">
+                <h4>Hours ⌚️</h4>
+              </div>
+              <div class="text-warning text-center mt-2"><h1>346</h1></div>
+            </div>
+          </div>
+          <!-- My Journals Section -->
+          <div class="card text-white mb-3 mt-3" id="opacity-card">
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+            >
+              <h5 class="mb-0">My Journals</h5>
+              <div>
+                <button class="btn btn-primary btn-sm me-2">Add New</button>
+                <button class="btn btn-secondary btn-sm">See All</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <!-- Journal 1 Placeholder -->
+                <div
+                  class="journal-placeholder card text-white"
+                  style="
+                    background-color: #333;
+                    width: 23%;
+                    height: 200px;
+                    border: 1px solid #444;
+                    margin-right: 10px;
+                  "
+                >
+                  <div class="card-body text-center">
+                    <h6 class="card-title">Journal 1</h6>
+                    <p class="card-text">Placeholder content for Journal 1.</p>
+                  </div>
+                </div>
+
+                <!-- Journal 2 Placeholder -->
+                <div
+                  class="journal-placeholder card text-white"
+                  style="
+                    background-color: #333;
+                    width: 23%;
+                    height: 200px;
+                    border: 1px solid #444;
+                    margin-right: 10px;
+                  "
+                >
+                  <div class="card-body text-center">
+                    <h6 class="card-title">Journal 2</h6>
+                    <p class="card-text">Placeholder content for Journal 2.</p>
+                  </div>
+                </div>
+
+                <!-- Journal 3 Placeholder -->
+                <div
+                  class="journal-placeholder card text-white"
+                  style="
+                    background-color: #333;
+                    width: 23%;
+                    height: 200px;
+                    border: 1px solid #444;
+                    margin-right: 10px;
+                  "
+                >
+                  <div class="card-body text-center">
+                    <h6 class="card-title">Journal 3</h6>
+                    <p class="card-text">Placeholder content for Journal 3.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

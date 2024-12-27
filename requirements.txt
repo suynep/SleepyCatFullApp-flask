@@ -1,5 +1,6 @@
-flask
+flask[async]
 flask-socketio
+flask-socketio[asyncio]
 pymongo
 python-dotenv
 pyjwt
