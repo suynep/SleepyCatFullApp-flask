@@ -250,14 +250,16 @@ def handle_save(current_user):
         print("Journal created + saved successfully")
     else:
         print("Updating journal" + str(data))
+        title = data["title"]
         journals_collection.update_one(
-            {"_id": ObjectId(data["journalid"])}, {"$set": {"body": data["data"]}}
+            {"_id": ObjectId(data["journalid"])}, {"$set": {"body": data["data"], "title": title}}
         )
         socketio.emit(
             "ui_update", {"color": color_mapper(sentiment_analyser(data["data"]))}
         )
         print("data: ", data["data"], "\n", sentiment_analyser(data["data"]), color_mapper(sentiment_analyser(data["data"])))
         print("Journal updated + saved successfully")
+
     return redirect(url_for("journal_entry", current_user=current_user, journal_id=data["journalid"]))
 
 # @socketio.on("save")

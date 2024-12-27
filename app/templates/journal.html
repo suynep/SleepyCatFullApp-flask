@@ -159,7 +159,36 @@
   journalIDInput.addEventListener("blur", () => {
     const newTitle = journalIDInput.value;
     const id = window.location.pathname.split("/").pop();
-    socket.emit("update_title", { title: newTitle, journalID: id });
+    const dataToUpdate = {
+      // Your data here
+      data: easyMDE.value(),
+      journalid: window.location.pathname.split("/").pop(),
+      title: newTitle,
+      id: id,
+    };
+
+    fetch("/save", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToUpdate),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((data) => {
+        console.log(data.message);
+        // Handle success, e.g., display a message to the user
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+        // Handle error, e.g., display an error message to the user
+      });
+    disableSave();
   });
 
   // setTimeout(() => {
