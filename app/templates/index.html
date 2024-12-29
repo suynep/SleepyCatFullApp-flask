@@ -138,7 +138,7 @@
     <script>
       const themes = [
         {
-          name: "default",
+          name: "choco",
           gradient: `linear-gradient(
                   250deg,
                   var(--bole),
@@ -173,13 +173,36 @@
         {
           name: "pink sky",
           gradient: `linear-gradient(
+                  250deg,
                   var(--light-orange),
                   var(--salmon-pink),
                   var(--blush),
                   var(--raspberry-rose),
                   var(--chocolate-cosmos)
           )`,
-        }
+        },
+        {
+          name: "alien",
+          gradient: `linear-gradient(
+                  250deg,
+                  var(--dark-slate-gray),
+                  var(--myrtle-green),
+                  var(--sea-green),
+                  var(--jade),
+                  var(--kelly-green)
+          )`,
+        },
+        {
+          name: "purple forest",
+          gradient: `linear-gradient(
+                  260deg,
+                  var(--mountbatten-pink),
+                  var(--fairy-tale),
+                  var(--eggplant),
+                  var(--van-dyke),
+                  var(--licorice)
+          )`,
+        },
       ];
 
       let currentThemeIndex = 0;
@@ -189,21 +212,32 @@
         .addEventListener("click", () => {
           currentThemeIndex = (currentThemeIndex + 1) % themes.length;
           const currentTheme = themes[currentThemeIndex];
+          localStorage.setItem("theme", currentThemeIndex);
           document.body.style.background = currentTheme.gradient;
           document.getElementById(
             "theme-switcher"
-          ).textContent = `${currentTheme.name} Theme`;
+          ).textContent = `${currentTheme.name}.`;
           document.body.style.backgroundSize = "1000% 1000%";
-          document.body.style.animation = "bubblegumFlow 9s ease infinite"
+          document.body.style.animation = "bubblegumFlow 12s ease infinite";
         });
 
       // Initialize with the first theme
-      document.body.style.background = themes[currentThemeIndex].gradient;
-      document.body.style.backgroundSize = "1000% 1000%";
-      document.body.style.animation = "bubblegumFlow 9s ease infinite"
-      document.getElementById(
-        "theme-switcher"
-      ).textContent = `${themes[currentThemeIndex].name} Theme`;
+      if (localStorage.getItem("theme") === null) {
+        document.body.style.background = themes[currentThemeIndex].gradient;
+        document.body.style.backgroundSize = "1000% 1000%";
+        document.body.style.animation = "bubblegumFlow 12s ease infinite";
+        document.getElementById(
+          "theme-switcher"
+        ).textContent = `${themes[currentThemeIndex].name}.`;
+      } else {
+        currentThemeIndex = parseInt(localStorage.getItem("theme"));
+        document.body.style.background = themes[currentThemeIndex].gradient;
+        document.body.style.backgroundSize = "1000% 1000%";
+        document.body.style.animation = "bubblegumFlow 12s ease infinite";
+        document.getElementById(
+          "theme-switcher"
+        ).textContent = `${themes[currentThemeIndex].name}.`;
+      }
     </script>
   </body>
 </html>
