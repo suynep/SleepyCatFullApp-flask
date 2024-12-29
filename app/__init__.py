@@ -174,8 +174,16 @@ def dashboard(current_user):
 @app.route("/journal/<journal_id>")
 @token_required
 def journal_entry(current_user, journal_id):
+    # print("received json: " + str(json))
+    # journal_id = json["journalid"]
+    journal = journals_collection.find_one({"_id": ObjectId(journal_id)})
+    if journal:
+        print("Journal found: ", journal)
+        return render_template("journal.html", user=current_user, journalid=journal_id, body=journal["body"], title=journal["title"])
+    else:
+        return render_template("journal.html", user=current_user, journalid=journal_id, body="", title="Untitled")
+    # socketio.emit("update", {"data": journal["body"], "title": journal["title"]})
     # journal = journals_collection.find_one({"_id": ObjectId(journal_id)})
-    return render_template("journal.html", user=current_user, journalid=journal_id)
 
 @app.route("/journal/delete/<journal_id>")
 @token_required
@@ -233,7 +241,7 @@ def update_journal_title(json):
         print("Failed to update journal title")
         socketio.emit("title_updated", {"status": "failure"})
 
-@app.route("/save", methods=["PUT"])
+@app.route("/save", methods=["GET", "POST"])
 @token_required
 def handle_save(current_user):
     user_id = jwt.decode(
@@ -260,8 +268,10 @@ def handle_save(current_user):
         print("data: ", data["data"], "\n", sentiment_analyser(data["data"]), color_mapper(sentiment_analyser(data["data"])))
         print("Journal updated + saved successfully")
 
-    return redirect(url_for("journal_entry", current_user=current_user, journal_id=data["journalid"]))
+    # return redirect(url_for("journal_entry", current_user=current_user, journal_id=data["journalid"]))
 
+
+    return redirect(f"/journal/{data['journalid']}")
 # @socketio.on("save")
 # def handle_save(json):
 #     user_id = jwt.decode(

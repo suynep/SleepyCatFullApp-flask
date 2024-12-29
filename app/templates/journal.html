@@ -18,10 +18,11 @@
   📓 #<input
     type="text"
     id="journalID"
-    value="{{ journalid }}"
+    value="{{ title }}"
     class="form-control d-inline-block w-auto"
   />
 </p>
+<p id="placeholder-data" hidden>{{ body }}</p>
 <textarea id="my-text-area"></textarea>
 <button id="save" class="btn btn-primary">Save</button>
 <div class="bubbles">
@@ -76,6 +77,10 @@
     uploadImage: true,
     placeholder: "Start writing...",
   });
+  
+  const bodyData = document.getElementById("placeholder-data").textContent;
+  easyMDE.value(bodyData);
+
   var socket = io();
 
   const terminatingChars = [" ", ".", ",", "!", "?", "\n"];
@@ -90,6 +95,7 @@
 
   const saveButton = document.getElementById("save");
 
+  
   function disableSave() {
     document.getElementById("save").disabled = true;
     document.getElementById("save").innerHTML = "Saving...";
@@ -99,14 +105,18 @@
     }, 2000);
   }
   saveButton.addEventListener("click", function () {
+    const newTitle = journalIDInput.value;
+    const id = window.location.pathname.split("/").pop();
     const dataToUpdate = {
       // Your data here
       data: easyMDE.value(),
       journalid: window.location.pathname.split("/").pop(),
+      title: newTitle,
+      id: id,
     };
 
     fetch("/save", {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -114,12 +124,12 @@
     })
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response
         }
         throw new Error("Network response was not ok.");
       })
       .then((data) => {
-        console.log(data.message);
+        console.log(data);
         // Handle success, e.g., display a message to the user
       })
       .catch((error) => {
@@ -139,10 +149,10 @@
     console.log("Connected to server");
   });
 
-  socket.on("update", (data) => {
-    easyMDE.value(data.data);
-    document.getElementById("journalID").value = data.title;
-  });
+  // socket.on("update", (data) => {
+  //   easyMDE.value(data.data);
+  //   document.getElementById("journalID").value = data.title;
+  // });
 
   socket.on("ui_update", (data) => {
     bubbles = document.querySelectorAll(".bubble");
@@ -168,7 +178,7 @@
     };
 
     fetch("/save", {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -176,12 +186,12 @@
     })
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response
         }
         throw new Error("Network response was not ok.");
       })
       .then((data) => {
-        console.log(data.message);
+        console.log(data);
         // Handle success, e.g., display a message to the user
       })
       .catch((error) => {
