@@ -11,8 +11,21 @@
   --chefchaouen-blue: #4895ef;
   --vivid-sky-blue: #4cc9f0;
 
-  /* default palette */
+  /* earthy blend */
+  --dark-moss-green: #606c38ff;
+  --pakistan-green: #283618ff;
+  --cornsilk: #fefae0ff;
+  --earth-yellow: #dda15eff;
+  --tigers-eye: #bc6c25ff;
 
+  /* pink-sky theme */
+  --light-orange: #f9dbbdff;
+  --salmon-pink: #ffa5abff;
+  --blush: #da627dff;
+  --raspberry-rose: #a53860ff;
+  --chocolate-cosmos: #450920ff;
+
+  /* default palette */
   --bole: #774936;
   --bole-2: #6e4230;
   --bole-3: #653a2a;
@@ -27,126 +40,20 @@
 
 @keyframes bubblegumFlow {
   0% {
-    background: linear-gradient(
-      90deg,
-      var(--rose),
-      var(--fandango),
-      var(--grape),
-      var(--chrysler-blue)
-    );
-  }
-  25% {
-    background: linear-gradient(
-      90deg,
-      var(--chrysler-blue),
-      var(--dark-blue),
-      var(--zaffre),
-      var(--palatinate-blue)
-    );
+    background-position: 0% 75%;
   }
   50% {
-    background: linear-gradient(
-      90deg,
-      var(--palatinate-blue),
-      var(--neon-blue),
-      var(--chefchaouen-blue),
-      var(--vivid-sky-blue)
-    );
-  }
-  75% {
-    background: linear-gradient(
-      90deg,
-      var(--vivid-sky-blue),
-      var(--chefchaouen-blue),
-      var(--neon-blue),
-      var(--palatinate-blue)
-    );
+    background-position: 100% 26%;
   }
   100% {
-    background: linear-gradient(
-      90deg,
-      var(--rose),
-      var(--fandango),
-      var(--grape),
-      var(--chrysler-blue)
-    );
+    background-position: 0% 75%;
   }
 }
-
-@keyframes defaultFlow {
-  0% {
-    background: linear-gradient(
-      90deg,
-      var(--bole),
-      var(--bole-2),
-      var(--bole-3),
-      var(--caput-mortuum)
-    );
-  }
-  25% {
-    background: linear-gradient(
-      90deg,
-      var(--caput-mortuum),
-      var(--caput-mortuum-2),
-      var(--caput-mortuum-3),
-      var(--black-bean)
-    );
-  }
-  50% {
-    background: linear-gradient(
-      90deg,
-      var(--black-bean),
-      var(--black-bean-2),
-      var(--black-bean-3),
-      var(--black-bean-4)
-    );
-  }
-  75% {
-    background: linear-gradient(
-      90deg,
-      var(--black-bean-4),
-      var(--black-bean-3),
-      var(--black-bean-2),
-      var(--black-bean)
-    );
-  }
-  100% {
-    background: linear-gradient(
-      90deg,
-      var(--bole),
-      var(--bole-2),
-      var(--bole-3),
-      var(--caput-mortuum)
-    );
-  }
-}
-/* @keyframes gradientFlow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-} */
 
 body {
-  /* margin: 0;
-  overflow: scroll;
-  background: #323232;
-  font: Roboto, sans-serif; */
   margin: 0;
   overflow: scroll;
   font: Roboto, sans-serif;
-  background: linear-gradient(
-    var(--black-bean),
-    var(--black-bean-3),
-    var(--black-bean-4)
-  );
-  background-size: 50% 50%;
-  animation: defaultFlow 10s ease infinite;
 }
 
 .bubbles {

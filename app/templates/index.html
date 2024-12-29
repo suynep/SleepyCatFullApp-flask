@@ -136,26 +136,74 @@
     ></script>
 
     <script>
-      const themeSwitcher = document.getElementById("theme-switcher");
-      let isDefaultTheme = true; // Tracks the current theme state
-
-      themeSwitcher.addEventListener("click", () => {
-        const root = document.documentElement;
-
-        if (isDefaultTheme) {
-          document.body.style.backgroundSize = "400% 400%";
-          document.body.style.animation = "defaultFlow 10s ease infinite";
-
-          themeSwitcher.textContent = "bubblegum. Theme";
-        } else {
-          document.body.style.backgroundSize = "400% 400%";
-          document.body.style.animation = "bubblegumFlow 10s ease infinite";
-
-          themeSwitcher.textContent = "default. Theme";
+      const themes = [
+        {
+          name: "default",
+          gradient: `linear-gradient(
+                  250deg,
+                  var(--bole),
+                  var(--bole-3),
+                  var(--caput-mortuum-2),
+                  var(--black-bean-2),
+                  var(--black-bean-4)
+                )`,
+        },
+        {
+          name: "bubblegum",
+          gradient: `linear-gradient(
+                  250deg,
+                  var(--rose),
+                  var(--grape),
+                  var(--dark-blue),
+                  var(--neon-blue),
+                  var(--vivid-sky-blue)
+                )`,
+        },
+        {
+          name: "earthy",
+          gradient: `linear-gradient(
+                  250deg,
+                  var(--dark-moss-green),
+                  var(--pakistan-green),
+                  var(--cornsilk),
+                  var(--earth-yellow),
+                  var(--tigers-eye)
+                )`,
+        },
+        {
+          name: "pink sky",
+          gradient: `linear-gradient(
+                  var(--light-orange),
+                  var(--salmon-pink),
+                  var(--blush),
+                  var(--raspberry-rose),
+                  var(--chocolate-cosmos)
+          )`,
         }
+      ];
 
-        isDefaultTheme = !isDefaultTheme; // Toggle theme state
-      });
+      let currentThemeIndex = 0;
+
+      document
+        .getElementById("theme-switcher")
+        .addEventListener("click", () => {
+          currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+          const currentTheme = themes[currentThemeIndex];
+          document.body.style.background = currentTheme.gradient;
+          document.getElementById(
+            "theme-switcher"
+          ).textContent = `${currentTheme.name} Theme`;
+          document.body.style.backgroundSize = "1000% 1000%";
+          document.body.style.animation = "bubblegumFlow 9s ease infinite"
+        });
+
+      // Initialize with the first theme
+      document.body.style.background = themes[currentThemeIndex].gradient;
+      document.body.style.backgroundSize = "1000% 1000%";
+      document.body.style.animation = "bubblegumFlow 9s ease infinite"
+      document.getElementById(
+        "theme-switcher"
+      ).textContent = `${themes[currentThemeIndex].name} Theme`;
     </script>
   </body>
 </html>
