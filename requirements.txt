@@ -7,3 +7,4 @@ pyjwt
 gunicorn
 eventlet
 nltk
+markdown-pdf

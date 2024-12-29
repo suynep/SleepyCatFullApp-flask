@@ -1,10 +1,13 @@
-from flask import Flask, session
+from flask import Flask, session, send_file
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from os import getenv
 from dotenv import load_dotenv
 from flask_socketio import SocketIO
 from app.ai import sentiment_analyser, color_mapper
+import tempfile
+import os
+from markdown_pdf import MarkdownPdf, Section
 
 load_dotenv()
 
@@ -240,6 +243,37 @@ def update_journal_title(json):
     else:
         print("Failed to update journal title")
         socketio.emit("title_updated", {"status": "failure"})
+
+@app.route("/download", methods=["POST"])
+def download_markdown_as_pdf():
+    # Assuming journal content comes from a form submission
+    content = request.get_json()
+    journal_content = content["body"]
+    title = content["title"]
+
+    # Generate the PDF
+    temp_dir = tempfile.gettempdir()
+    pdf_path = os.path.join(temp_dir, 'journal.pdf')
+
+    print(pdf_path)
+
+    pdf = MarkdownPdf(toc_level=2)
+    pdf.add_section(Section(journal_content))
+    pdf.save(pdf_path)
+
+    
+    # with open(pdf_path, 'wb') as pdf_file:
+    #     markdown2pdf3.convert_markdown_to_pdf(journal_content, pdf_file)
+
+    # Serve the PDF for download
+    response = send_file(pdf_path, as_attachment=True, download_name=f'{title}.pdf')
+
+    # Clean up the temporary file
+    @response.call_on_close
+    def cleanup():
+        os.remove(pdf_path)
+
+    return response
 
 @app.route("/save", methods=["GET", "POST"])
 @token_required
