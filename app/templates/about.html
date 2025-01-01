@@ -1,25 +1,37 @@
 {% extends "index.html" %} {% block content %}
 <div class="container mt-5">
   <div class="jumbotron text-white p-5 rounded about-container">
-    <h1 class="display-4">About SleePyCat 🦾😺</h1>
-    <p class="lead">
-      SleePyCat is a simple journal application built with Flask and MongoDB 🎰.
+    <h1 class="display-4 ">
+      Yay!
+    </h1>
+    <p class="lead playwrite-au-sa-journal-headings">
+      Welcome to SleePyCat, where journaling meets simplicity 
     </p>
     <hr class="my-4" />
-    <p>
-      It allows users to create an account, log in, and write journal entries.
-      The application is built with Flask, a Python web framework, and MongoDB,
-      a non-relational database engine. The application uses JSON web tokens to
-      manage user sessions. The application is styled with Bootstrap, a popular
-      CSS framework.
-    </p>
+    <div>
+      ✨ Why you’ll love it:
+
+      <ul>
+        <li>Your space, your rules: A private journal that’s all about you.</li>
+
+        <li>
+          Effortless journaling: Simple, sleek, and designed to flow with your
+          ideas.
+        </li>
+
+        <li>
+          Always there for you: Safe, secure, and ready whenever inspiration
+          strikes.
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div class="row mt-5">
     <div class="col-md-4">
       <div class="card text-white mb-3 about-container">
         <div class="card-body">
-          <h5 class="card-title">Flask</h5>
+          <h5 class="card-title">Flask <i class="fa-solid fa-flask"></i></h5>
           <p class="card-text">
             A lightweight WSGI web application framework in Python. 👨‍🔬
           </p>
@@ -29,7 +41,7 @@
     <div class="col-md-4">
       <div class="card text-white mb-3 about-container">
         <div class="card-body">
-          <h5 class="card-title">MongoDB</h5>
+          <h5 class="card-title">MongoDB <i class="fa-solid fa-database"></i></h5>
           <p class="card-text">
             A Non-relational DB that's hosted remotely somewhere... 🧑‍🚀
           </p>
@@ -39,7 +51,7 @@
     <div class="col-md-4">
       <div class="card text-white mb-3 about-container">
         <div class="card-body">
-          <h5 class="card-title">Bootstrap</h5>
+          <h5 class="card-title">Bootstrap <i class="fa-brands fa-bootstrap"></i></h5>
           <p class="card-text">
             The most popular CSS framework for developing responsive and
             mobile-first websites. 🎨
@@ -48,7 +60,7 @@
       </div>
     </div>
   </div>
-  <div class="jumbotron text-white p-5 rounded about-container">
+  <!-- <div class="jumbotron text-white p-5 rounded about-container">
     <h1 class="display-4">Features</h1>
     <p class="lead">What makes SleePyCat stand out</p>
     <hr class="my-4" />
@@ -75,7 +87,7 @@
       </li>
     </ul>
   </div>
-</div>
+</div> -->
 
 {% with messages = get_flashed_messages(with_categories=true) %} {% if messages
 %} {% include "toast.html" %} {% endif %} {% endwith %}

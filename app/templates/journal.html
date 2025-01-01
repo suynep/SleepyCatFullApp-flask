@@ -24,8 +24,14 @@
 </p>
 <p id="placeholder-data" hidden>{{ body }}</p>
 <textarea id="my-text-area"></textarea>
-<button id="save" class="btn btn-primary">Save</button>
-<button id="dl-btn" class="btn btn-success">Download as PDF</button>
+<div class="d-flex justify-content-between">
+  <button id="save" class="btn btn-primary">
+    <i class="fa-solid fa-floppy-disk"></i>
+  </button>
+  <button id="dl-btn" class="btn btn-success">
+    <i class="fa-solid fa-download"></i> as PDF
+  </button>
+</div>
 <div class="bubbles">
   <!-- Generate multiple bubble divs using JavaScript -->
 </div>
@@ -134,7 +140,7 @@
     document.getElementById("save").innerHTML = "Saving...";
     setTimeout(function () {
       document.getElementById("save").disabled = false;
-      document.getElementById("save").innerHTML = "Save";
+      document.getElementById("save").innerHTML = '<i class="fa-solid fa-floppy-disk"></i>';
     }, 2000);
   }
   saveButton.addEventListener("click", function () {

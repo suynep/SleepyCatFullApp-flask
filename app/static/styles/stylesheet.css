@@ -180,3 +180,10 @@ body {
 .about-container {
   background-color: #0e0e0e;
 }
+
+.playwrite-au-sa-journal-headings {
+  font-family: "Playwrite AU SA", serif;
+  font-optical-sizing: auto;
+  font-weight: 350;
+  font-style: normal;
+}
