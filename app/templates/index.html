@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-8QQEPEMZEH"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-8QQEPEMZEH");
+    </script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -78,24 +92,30 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('index') }}"><i class="fa-solid fa-house"></i></a>
+              <a class="nav-link" href="{{ url_for('index') }}"
+                ><i class="fa-solid fa-house"></i
+              ></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('about') }}"><i class="fa-solid fa-user-secret"></i></a>
+              <a class="nav-link" href="{{ url_for('about') }}"
+                ><i class="fa-solid fa-user-secret"></i
+              ></a>
             </li>
             {% if session["jwt"] %}
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('dashboard') }}"
-                ><i class="fa-solid fa-user"></i></a
-              >
+                ><i class="fa-solid fa-user"></i
+              ></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('journal') }}"
-                ><i class="fa-solid fa-book-open"></i></a
-              >
+                ><i class="fa-solid fa-book-open"></i
+              ></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('logout') }}"><i class="fa-solid fa-lock"></i></a>
+              <a class="nav-link" href="{{ url_for('logout') }}"
+                ><i class="fa-solid fa-lock"></i
+              ></a>
             </li>
             {% else %}
             <li class="nav-item">
